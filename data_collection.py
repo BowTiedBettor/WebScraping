@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 import requests
 import json
+from traceback import print_exc
 
 """
 A simple example of how you could use web scraping to collect online data
@@ -27,7 +28,7 @@ for single_date in daterange(start_date, end_date):
     try:
         data.append(process_data(response))
     except Exception as e:
-        # print(repr(e))
+        # print_exc()
         continue
 
 with open('horsedata.json', 'w') as file:
