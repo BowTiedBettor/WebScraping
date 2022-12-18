@@ -256,3 +256,85 @@ class Bookie:
 
     def to_excel(self, path: str):
         pass
+    
+class ATG:
+    def __init__(self, datum: str, bankod: str):
+        """
+        Necessary input
+        """
+        self.datum = datum
+        self.bankod = bankod
+
+    def scrape_streckspel(self, spelform: str, spelform_start_lopp: str):
+        """
+        Exotic betting
+        """
+        pd_lista = []
+
+        url = f"https://www.atg.se/services/racinginfo/v1/api/games/{spelform}_{self.datum}_{self.bankod}_{spelform_start_lopp}"
+        response_json = requests.get(url).json()
+
+        for avd in response_json['races']:
+            lopp_df = pd.DataFrame(columns=["Startnr", "Häst", "Procent"])
+            try:
+                startande_hästar = avd['starts']
+                for häst in startande_hästar:
+                    startnr = häst['number']
+                    hästnamn = häst['horse']['name']
+                    spelform_procent = häst['pools'][spelform]['betDistribution'] / 100
+
+                    dummy_df = lopp_df
+                    ny_rad = pd.DataFrame(
+                        [[startnr, hästnamn, spelform_procent]], columns=lopp_df.columns)
+                    lopp_df = pd.concat([dummy_df, ny_rad], ignore_index=True)
+
+            except Exception as e:
+                print(f"Problem with race {response_json['races'].index(avd) + 1}")
+                print_exc()
+
+            pd_lista.append(lopp_df)
+
+        return pd_lista
+
+    def scrape_vp(self, från_lopp: str, till_lopp: str):
+        """
+        Win and show odds
+        """
+        pd_lista = []
+
+        for loppnr in range(int(från_lopp), int(till_lopp) + 1):
+            lopp_df = pd.DataFrame(columns=["Startnr", "Häst", "VOdds", "POdds"])
+            try:
+                url = f"https://www.atg.se/services/racinginfo/v1/api/games/vinnare_{self.datum}_{self.bankod}_{loppnr}"
+                response_json = requests.get(url).json()
+                startande_hästar = response_json['races'][0]['starts']
+                for häst in startande_hästar:
+                    startnr = häst['number']
+                    hästnamn = häst['horse']['name']
+                    vodds = häst['pools']['vinnare']['odds'] / 100
+                    podds = häst['pools']['plats']['minOdds'] / 100
+
+                    dummy_df = lopp_df
+                    ny_rad = pd.DataFrame(
+                        [[startnr, hästnamn, vodds, podds]], columns=lopp_df.columns)
+                    lopp_df = pd.concat([dummy_df, ny_rad], ignore_index=True)
+            except:
+                print_exc()
+                continue
+
+            pd_lista.append(lopp_df)
+
+        return pd_lista
+
+    def track_odds(self):
+        pass
+    
+    def to_excel(self): 
+        pass
+    
+    def map_to_model_input(self): 
+        pass
+    
+    def historical_data(self): 
+        pass
+
