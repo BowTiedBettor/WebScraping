@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 import smtplib
 import requests
+from traceback import print_exc
 
 """
 Example of how to build a proper scraper for a horse racing website
@@ -86,7 +87,7 @@ class Bookie:
                 raise Exception("bla bla bla")
 
         except Exception as e:
-            print("Information:", repr(e))
+            print_exc()
             return e
 
     def scrape_vp(self, bana: str, lopp: list = None, outrightmarknad: bool = False):
@@ -135,7 +136,7 @@ class Bookie:
 
             except Exception as e:
                 print("bla bla bla") 
-                print("Information:", repr(e))
+                print_exc()
 
             sorted_df = lopp_df.sort_values(by="Startnr")
             pd_lista.append(sorted_df)
@@ -184,13 +185,13 @@ class Bookie:
 
             except Exception as e:
                 print("bla bla bla") 
-                print("Information:", repr(e))
+                print_exc()
 
         return pd_lista
 
     def awaitnewodds(self, bana: str, lopp: list, delta: int):
         """
-        Awaits new odds, could be done by awaiting the information from the WebSocket [the whole purpose of the protocolf lol]
+        Awaits new odds, could be done by awaiting the information from the WebSocket [the whole purpose of the protocol lol]
         but doesn't matter in practice
         """
         while True:
