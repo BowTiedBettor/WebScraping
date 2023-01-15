@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
 
+# Check out this post for an explanation of the below [basic] code: https://bowtiedbettor.substack.com/p/build-your-first-odds-scraper
 
 """
 Set up a selenium/webdriver session
