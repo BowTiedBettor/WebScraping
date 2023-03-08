@@ -39,7 +39,8 @@ class Unibet:
         until = (datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')
 
         try:
-            response = requests.get(f"https://rsa.unibet.co.uk/api/v1/graphql?operationName=MeetingsByDateRange&variables=%7B%22startDateTime%22%3A%22{start}T23%3A00%3A00.000Z%22%2C%22endDateTime%22%3A%22{until}T23%3A00%3A00.000Z%22%2C%22countryCodes%22%3A%22{countrycode}%22%2C%22raceTypes%22%3A%5B%22H%22%5D%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22b975a015a4d4e4dc298ebd6dd43e988ebf03fb940e2bb719478b59bde7bbffd6%22%7D%7D", headers=self.headers, verify = False)
+            response = requests.get(f"https://rsa.unibet.co.uk/api/v1/graphql?operationName=MeetingsByDateRange&variables=%7B%22startDateTime%22%3A%22{start}T23%3A00%3A00.000Z%22%2C%22endDateTime%22%3A%22{until}T23%3A00%3A00.000Z%22%2C%22countryCodes%22%3A%22{countrycode}%22%2C%22raceTypes%22%3A%5B%22H%22%5D%7D&extensions=%7B%22persistedQuery%22%3A%7B%22version%22%3A1%2C%22sha256Hash%22%3A%22b975a015a4d4e4dc298ebd6dd43e988ebf03fb940e2bb719478b59bde7bbffd6%22%7D%7D",
+                headers=self.headers, verify = False)
             resp_json = response.json()
 
             meetings = resp_json['data']['viewer']['meetingsByDateRange']
